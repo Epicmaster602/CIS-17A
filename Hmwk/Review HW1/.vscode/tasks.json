@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MSVC: Build active file",
+      "type": "shell",
+      "command": "cl.exe",
+      "args": [
+        "/nologo", "/std:c++17", "/Zi", "/W3", "/EHsc", "/Od",
+        "/Fo:\"${fileDirname}\\${fileBasenameNoExtension}.obj\"",
+        "/Fe:\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
+        "\"${file}\""
+      ],
+      "options": { "cwd": "${fileDirname}" },
+      "problemMatcher": ["$msCompile"],
+      "group": { "kind": "build", "isDefault": true }
+    }
+  ]
+}

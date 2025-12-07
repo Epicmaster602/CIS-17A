@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "msvc build active file",
+      "type": "shell",
+      "command": "cl",
+      "args": ["/EHsc", "/Zc:__cplusplus", "/Fe:${fileDirname}\\${fileBasenameNoExtension}.exe", "${file}"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$msCompile"]
+    }
+  ]
+}

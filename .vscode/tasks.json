@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build with MSVC",
+      "type": "shell",
+      "command": "cl",
+      "args": [
+        "/nologo",
+        "/EHsc",
+        "/std:c++17",
+        "/W4",
+        "main.cpp",
+        "/Fe:app.exe"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": ["$msCompile"],
+      "group": { "kind": "build", "isDefault": true }
+    }
+  ]
+}

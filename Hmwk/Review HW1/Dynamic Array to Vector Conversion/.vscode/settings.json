@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "dynamic array to vector conversion1": "cpp",
+        "iostream": "cpp",
+        "vector": "cpp",
+        "cstdlib": "cpp",
+        "iomanip": "cpp"
+    }
+}

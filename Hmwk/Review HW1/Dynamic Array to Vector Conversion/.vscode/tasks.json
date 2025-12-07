@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build current cpp (MSVC)",
+      "type": "shell",
+      "command": "cl",
+      "args": [
+        "/nologo",
+        "/std:c++17",
+        "/EHsc",
+        "\"${file}\"",                                     // compile the file you have open
+        "/Fo:\"${fileDirname}\\${fileBasenameNoExtension}.obj\"",
+        "/Fe:\"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+      ],
+      "options": { "cwd": "${fileDirname}" },              // run from that file's folder
+      "problemMatcher": ["$msCompile"],
+      "group": { "kind": "build", "isDefault": true }
+    }
+  ]
+}

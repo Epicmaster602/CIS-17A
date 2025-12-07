@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run app.exe (MSVC)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\bin\\app.exe",
+      "cwd": "${workspaceFolder}",
+      "externalConsole": true,
+      "preLaunchTask": "Build C++ (MSVC) → bin/app.exe"
+    }
+  ]
+}

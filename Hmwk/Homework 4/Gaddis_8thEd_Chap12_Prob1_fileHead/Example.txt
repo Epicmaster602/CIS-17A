@@ -1,0 +1,10 @@
+Line 1: Hello world
+Line 2: This is a test file
+Line 3: It has several lines
+Line 4: Just for demonstration
+Line 5: Nothing fancy
+Line 6: Keep going
+Line 7: Still more
+Line 8: Almost done
+Line 9: Line nine here
+Line 10: I hate coding! (lie) :)

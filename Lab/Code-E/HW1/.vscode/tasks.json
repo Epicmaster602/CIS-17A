@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build C++ (MSVC) → bin/app.exe",
+      "type": "shell",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "\"call \"%ProgramFiles(x86)%\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\VsDevCmd.bat\" -arch=amd64 && if not exist \"${workspaceFolder}\\bin\" mkdir \"${workspaceFolder}\\bin\" && cl /nologo /std:c++17 /EHsc /Zi \"${file}\" /Fe:\"${workspaceFolder}\\bin\\app.exe\"\""
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": { "kind": "build", "isDefault": true }
+    }
+  ]
+}

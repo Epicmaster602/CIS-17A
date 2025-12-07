@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run current cpp (MSVC)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+      "args": [],
+      "cwd": "${fileDirname}",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "preLaunchTask": "build current cpp (MSVC)"
+    }
+  ]
+}
