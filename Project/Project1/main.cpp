@@ -1,9 +1,9 @@
 /* 
  * File:   main.cpp
- * Author: Your Name
+ * Author: Tyler Purba
  * 
  * Proj:   Battleship Game
- * Desc:   Board + basic structs (step 1)
+ * 
  */
 
 #include <iostream>
