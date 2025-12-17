@@ -69,6 +69,7 @@ void   clrBrd(char **, int, int, char);
 void   delBrd(char **, int);
 void   mkFlt(Ship*, int);
 
+
 class Plyr {
 public:
     char name[16];   // player name
@@ -76,6 +77,7 @@ public:
     char **sb;       // shot board
     Ship *flt;       // ships
     int  snum;       // ship count
+    virtual void turn(Plyr &def) = 0;
 
     // default ctor
     Plyr() {
@@ -103,22 +105,74 @@ public:
     }
 
     // destructor
-    ~Plyr() {
-        // delete boards
-        if (fb != nullptr) {
-            delBrd(fb, ROWS);
-            fb = nullptr;
-        }
-        if (sb != nullptr) {
-            delBrd(sb, ROWS);
-            sb = nullptr;
+   virtual ~Plyr() {
+    if (fb != nullptr) { delBrd(fb, ROWS); fb = nullptr; }
+    if (sb != nullptr) { delBrd(sb, ROWS); sb = nullptr; }
+    if (flt != nullptr) { delete [] flt; flt = nullptr; }
+}
+
+};
+
+// ---- needed prototypes before Hmn::turn ----
+void prtBrd(char **brd, int row, int col, const string &ttl);
+bool getPos(const string &in, int &row, int &col);
+int  hitShip(Plyr &def, int row, int col);
+bool allSunk(Plyr &p);
+
+
+class Hmn : public Plyr {
+public:
+    Hmn() : Plyr() {}
+    Hmn(const char nm[]) : Plyr(nm) {}
+
+    virtual void turn(Plyr &def) {
+        string ttl1 = string(name) + " FLEET";
+        string ttl2 = string(name) + " SHOTS";
+
+        prtBrd(fb, ROWS, COLS, ttl1);
+        prtBrd(sb, ROWS, COLS, ttl2);
+
+        int row, col;
+        string pos;
+
+        while (true) {
+            cout << name << " tgt (ex: A1): ";
+            cin >> pos;
+
+            if (!getPos(pos, row, col)) {
+                cout << "Bad pos. Try agn." << endl;
+                continue;
+            }
+            if (sb[row][col] != '.') {
+                cout << "Used pos. Pick new." << endl;
+                continue;
+            }
+            break;
         }
 
-        // delete fleet
-        if (flt != nullptr) {
-            delete [] flt;
-            flt = nullptr;
+        if (def.fb[row][col] == 'S') {
+            cout << "Hit!" << endl;
+            def.fb[row][col] = 'X';
+            sb[row][col] = 'X';
+
+            int idx = hitShip(def, row, col);
+            if (idx != -1) {
+                Ship &s = def.flt[idx];
+                s.hits++;
+                if (s.hits >= s.size && !s.sunk) {
+                    s.sunk = true;
+                    cout << "You sunk " << s.name << "!" << endl;
+                }
+            }
+        } else if (def.fb[row][col] == '.') {
+            cout << "Miss." << endl;
+            def.fb[row][col] = 'O';
+            sb[row][col] = 'O';
+        } else {
+            cout << "Weird pos, already hit." << endl;
         }
+
+        cout << endl;
     }
 };
 
@@ -160,6 +214,20 @@ public:
     int getWn() const {
         return wn;
     }
+
+    void rdBin(ifstream &fin) {
+    fin.read(nm, 16);
+    fin.read(reinterpret_cast<char*>(&pl), sizeof(pl));
+    fin.read(reinterpret_cast<char*>(&wn), sizeof(wn));
+    nm[15] = '\0';
+}
+
+    void wrBin(ofstream &fout) const {
+    fout.write(nm, 16);
+    fout.write(reinterpret_cast<const char*>(&pl), sizeof(pl));
+    fout.write(reinterpret_cast<const char*>(&wn), sizeof(wn));
+}
+
 };
 
 
@@ -183,7 +251,7 @@ ostream &operator<<(ostream &out, const Stat &s) {
 int  dice();
 int  hitShip(Plyr &def, int row, int col);
 bool allSunk(Plyr &p);
-void doShot(Plyr &atk, Plyr &def);
+
 
 
 const int MS = 20;          // max stats rec
@@ -261,36 +329,7 @@ void mkFlt(Ship *flt, int snum) {
 }
 
 
-void setPly(Plyr &p, const char nm[]) {
-    strncpy(p.name, nm, 15);
-    p.name[15] = '\0';
 
-    p.snum = SNUM;
-
-    p.fb = mkBrd(ROWS, COLS);
-    p.sb = mkBrd(ROWS, COLS);
-
-    clrBrd(p.fb, ROWS, COLS, '.');
-    clrBrd(p.sb, ROWS, COLS, '.');
-
-    p.flt = new Ship[p.snum];
-    mkFlt(p.flt, p.snum);
-}
-
-void delPly(Plyr &p) {
-    if (p.fb != nullptr) {
-        delBrd(p.fb, ROWS);
-        p.fb = nullptr;
-    }
-    if (p.sb != nullptr) {
-        delBrd(p.sb, ROWS);
-        p.sb = nullptr;
-    }
-    if (p.flt != nullptr) {
-        delete [] p.flt;
-        p.flt = nullptr;
-    }
-}
 
 
 bool canPut(Plyr &p, Ship &s, int row, int col, char dir) {
@@ -407,21 +446,32 @@ int rdStat(Stat st[], int max) {
     if (!fin) return 0;
 
     int n = 0;
-    while (n < max && fin.read(reinterpret_cast<char*>(&st[n]), sizeof(Stat))) {
+    while (n < max) {
+        // stop cleanly if name can't be read
+        char tmp[16];
+        fin.read(tmp, 16);
+        if (!fin) break;
+
+        // put name back then let object read normally
+        fin.seekg(-16, ios::cur);
+        st[n].rdBin(fin);
         n++;
     }
     fin.close();
     return n;
 }
 
+
 void wrStat(Stat st[], int sn) {
     ofstream fout(SFIL, ios::binary);
     if (!fout) return;
+
     for (int i = 0; i < sn; i++) {
-        fout.write(reinterpret_cast<char*>(&st[i]), sizeof(Stat)); // binary file//
+        st[i].wrBin(fout);
     }
     fout.close();
 }
+
 
 int findSt(Stat st[], int sn, const char nm[]) {
     for (int i = 0; i < sn; i++) {
@@ -542,8 +592,9 @@ int main(int argc, char** argv) {
             cin >> setw(16) >> nm2;
 
             // constructor handles everything
-            Plyr p1(nm1);
-            Plyr p2(nm2);
+            Hmn p1(nm1);
+            Hmn p2(nm2);
+
 
 
             cout << endl << "Place ships for " << p1.name << ":" << endl;
@@ -558,7 +609,8 @@ int main(int argc, char** argv) {
 
             while (true) {
                 cout << endl << "Turn: " << cur->name << endl;
-                doShot(*cur, *oth);
+                cur->turn(*oth);
+
 
                 if (allSunk(*oth)) {
                     cout << endl << cur->name << " wins!" << endl;
@@ -575,8 +627,7 @@ int main(int argc, char** argv) {
                 oth = tmp;
             }
 
-            delPly(p1);
-            delPly(p2);
+         
         }
         else if (opt == 2) {
             shwSt(st, sn);
@@ -645,53 +696,4 @@ void prtBrd(char **brd, int row, int col, const string &ttl) {
 }
 
 
-void doShot(Plyr &atk, Plyr &def) {
-    string ttl1 = string(atk.name) + " FLEET";
-    string ttl2 = string(atk.name) + " SHOTS";
-
-    prtBrd(atk.fb, ROWS, COLS, ttl1);
-    prtBrd(atk.sb, ROWS, COLS, ttl2);
-
-    int row, col;
-    string pos;
-
-    while (true) {
-        cout << atk.name << " tgt (ex: A1): ";
-        cin >> pos;
-
-        if (!getPos(pos, row, col)) {
-            cout << "Bad pos. Try agn." << endl;
-            continue;
-        }
-        if (atk.sb[row][col] != '.') {
-            cout << "Used pos. Pick new." << endl;
-            continue;
-        }
-        break;
-    }
-
-    if (def.fb[row][col] == 'S') {
-        cout << "Hit!" << endl;
-        def.fb[row][col] = 'X';
-        atk.sb[row][col] = 'X';
-
-        int idx = hitShip(def, row, col);
-        if (idx != -1) {
-            Ship &s = def.flt[idx];
-            s.hits++;
-            if (s.hits >= s.size && !s.sunk) {
-                s.sunk = true;
-                cout << "You sunk " << s.name << "!" << endl;
-            }
-        }
-    } else if (def.fb[row][col] == '.') {
-        cout << "Miss." << endl;
-        def.fb[row][col] = 'O';
-        atk.sb[row][col] = 'O';
-    } else {
-        cout << "Weird pos, already hit." << endl;
-    }
-
-    cout << endl;
-}
 
