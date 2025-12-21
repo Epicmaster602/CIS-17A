@@ -1,0 +1,25 @@
+var NAVTREEINDEX0 =
+{
+"_game_8h_source.html":[1,0,2],
+"_hm2_8h_source.html":[1,0,3],
+"_hmn_8h_source.html":[1,0,4],
+"_plyr_8h_source.html":[1,0,6],
+"_ship_8h_source.html":[1,0,7],
+"_stat_8h_source.html":[1,0,8],
+"annotated.html":[0,0],
+"brd_8h_source.html":[1,0,0],
+"cfg_8h_source.html":[1,0,1],
+"class_game.html":[0,0,0],
+"class_hm2.html":[0,0,1],
+"class_hmn.html":[0,0,2],
+"class_plyr.html":[0,0,3],
+"class_ship.html":[0,0,4],
+"class_stat.html":[0,0,5],
+"classes.html":[0,1],
+"files.html":[1,0],
+"hierarchy.html":[0,2],
+"index.html":[],
+"pages.html":[],
+"plfunc_8h_source.html":[1,0,5],
+"stfunc_8h_source.html":[1,0,9]
+};

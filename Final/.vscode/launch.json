@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C++ (MSVC): Build & Debug Active File",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+      "cwd": "${fileDirname}",
+      "args": [],
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "preLaunchTask": "MSVC: Build active file"
+    }
+  ]
+}

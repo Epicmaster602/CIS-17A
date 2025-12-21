@@ -1,0 +1,49 @@
+\doxysection{Stat.\+h}
+\hypertarget{_stat_8h_source}{}\label{_stat_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ STAT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ STAT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <ostream>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }Stat\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{char}\ nm[16];\ \ \textcolor{comment}{//\ name}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{int}\ \ pl;\ \ \ \ \ \ \textcolor{comment}{//\ games\ played}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{int}\ \ wn;\ \ \ \ \ \ \textcolor{comment}{//\ games\ won}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ cnt;\ \ \ \textcolor{comment}{//\ static\ count\ (for\ checkoff)}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ Stat();}
+\DoxyCodeLine{00018\ \ \ \ \ Stat(\textcolor{keyword}{const}\ Stat\ \&o);\ \ \ \textcolor{comment}{//\ copy\ ctor}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ getCnt();\ \ \ \textcolor{comment}{//\ shows\ static\ works}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ setNm(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ n[]);}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *getNm()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ addPl();}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ addWn();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{int}\ getPl()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ getWn()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ rdBin(std::ifstream\ \&fin);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ wrBin(std::ofstream\ \&fout)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ friend\ for\ operator<<\ (checks\ "{}friends"{}\ later\ too)}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&out,\ \textcolor{keyword}{const}\ Stat\ \&s);}
+\DoxyCodeLine{00035\ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{comment}{//\ operator\ overloads\ (declare\ here,\ define\ in\ Stat.cpp)}}
+\DoxyCodeLine{00038\ std::ostream\ \&operator<<(std::ostream\ \&out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_stat}{Stat}}\ \&s);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ If\ you\ already\ added\ these,\ keep\ them.\ If\ not,\ you\ can\ add\ them\ now.}}
+\DoxyCodeLine{00041\ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_stat}{Stat}}\ \&a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_stat}{Stat}}\ \&b);}
+\DoxyCodeLine{00042\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_stat}{Stat}}\ \&a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_stat}{Stat}}\ \&b);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
