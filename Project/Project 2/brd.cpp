@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// make dynamic 2D board row x col
+// allocate a dynamic 2D board (row pointers + column arrays)
 char **mkBrd(int row, int col) {
     char **brd = new char*[row];
     for (int r = 0; r < row; r++) {
@@ -12,7 +12,7 @@ char **mkBrd(int row, int col) {
     return brd;
 }
 
-// delete dynamic 2D board
+// free memory allocated by mkBrd
 void delBrd(char **brd, int row) {
     for (int r = 0; r < row; r++) {
         delete [] brd[r];
@@ -20,7 +20,7 @@ void delBrd(char **brd, int row) {
     delete [] brd;
 }
 
-// fill board with one char (ex: '.')
+// fill entire board with a single character
 void clrBrd(char **brd, int row, int col, char ch) {
     for (int r = 0; r < row; r++) {
         for (int c = 0; c < col; c++) {
@@ -29,7 +29,7 @@ void clrBrd(char **brd, int row, int col, char ch) {
     }
 }
 
-// print board with title + labels
+// print board with row/column labels
 void prtBrd(char **brd, int row, int col, const string &ttl) {
     cout << "--- " << ttl << " ---" << endl;
 

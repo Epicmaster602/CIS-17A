@@ -3,16 +3,21 @@
 
 #include <string>
 
-// make dynamic 2D board row x col
+/*
+ * Board helper functions.
+ * Used for creating, clearing, and displaying the game boards.
+ */
+
+// allocate a dynamic 2D board (row x col)
 char **mkBrd(int row, int col);
 
-// delete dynamic 2D board
+// free a dynamic 2D board
 void delBrd(char **brd, int row);
 
-// fill board with one char (ex: '.')
+// fill board with a single character (ex: '.')
 void clrBrd(char **brd, int row, int col, char ch);
 
-// print board with title + labels
+// print board with title and row/column labels
 void prtBrd(char **brd, int row, int col, const std::string &ttl);
 
 #endif

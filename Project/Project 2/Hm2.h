@@ -3,12 +3,19 @@
 
 #include "Plyr.h"
 
+/*
+ * Human player class. (2!)
+ * Implements turn logic using user input.
+ */
 class Hm2 : public Plyr {
 public:
-    Hm2();
-    Hm2(const char nm[]);
+    Hm2();                  // default ctor
+    Hm2(const char nm[]);   // ctor with player name
 
+    // override of base class turn function
     void turn(Plyr &def) override;
 };
 
 #endif
+
+

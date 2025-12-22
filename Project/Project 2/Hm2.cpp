@@ -6,19 +6,23 @@
 
 using namespace std;
 
+// helpers implemented in plfunc.cpp
 bool getPos(const string &in, int &row, int &col);
 int  hitShip(Plyr &def, int row, int col);
 
+// second human player turn (same logic as Hmn)
 void Hm2::turn(Plyr &def) {
-      string ttl1 = string(name) + " FLEET";
+    string ttl1 = string(name) + " FLEET";
     string ttl2 = string(name) + " SHOTS";
 
+    // display boards
     prtBrd(fb, ROWS, COLS, ttl1);
     prtBrd(sb, ROWS, COLS, ttl2);
 
     int row, col;
     string pos;
 
+    // get valid target
     while (true) {
         cout << name << " tgt (ex: A1): ";
         cin >> pos;
@@ -34,23 +38,24 @@ void Hm2::turn(Plyr &def) {
         break;
     }
 
-    if (def.fb[row][col] == 'S') {
+    // apply hit or miss
+    if (def.getFb()[row][col] == 'S') {
         cout << "Hit!" << endl;
-        def.fb[row][col] = 'X';
+        def.getFb()[row][col] = 'X';
         sb[row][col] = 'X';
 
         int idx = hitShip(def, row, col);
         if (idx != -1) {
-            Ship &s = def.flt[idx];
+            Ship &s = def.getFlt()[idx];
             s.hits++;
             if (s.hits >= s.size && !s.sunk) {
                 s.sunk = true;
                 cout << "You sunk " << s.name << "!" << endl;
             }
         }
-    } else if (def.fb[row][col] == '.') {
+    } else if (def.getFb()[row][col] == '.') {
         cout << "Miss." << endl;
-        def.fb[row][col] = 'O';
+        def.getFb()[row][col] = 'O';
         sb[row][col] = 'O';
     } else {
         cout << "Weird pos, already hit." << endl;
@@ -59,5 +64,6 @@ void Hm2::turn(Plyr &def) {
     cout << endl;
 }
 
+// constructors forward to base class
 Hm2::Hm2() : Plyr() {}
 Hm2::Hm2(const char nm[]) : Plyr(nm) {}

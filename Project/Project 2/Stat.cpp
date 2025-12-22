@@ -1,17 +1,18 @@
 #include "Stat.h"
 using namespace std;
 
+// static member initialization
 int Stat::cnt = 0;
 
 Stat::Stat() {
     nm[0] = '\0';
     pl = 0;
     wn = 0;
-    cnt++;
-
+    cnt++;  // track number of Stat objects created
 }
 
 Stat::Stat(const Stat &o) {
+    // copy all data from source object
     strncpy(nm, o.nm, 15);
     nm[15] = '\0';
     pl = o.pl;
@@ -33,11 +34,11 @@ const char *Stat::getNm() const {
 }
 
 void Stat::addPl() {
-    pl++;
+    pl++;   // increment games played
 }
 
 void Stat::addWn() {
-    wn++;
+    wn++;   // increment games won
 }
 
 int Stat::getPl() const {
@@ -49,6 +50,7 @@ int Stat::getWn() const {
 }
 
 void Stat::rdBin(std::ifstream &fin) {
+    // read fixed-size binary record
     fin.read(nm, 16);
     fin.read(reinterpret_cast<char*>(&pl), sizeof(pl));
     fin.read(reinterpret_cast<char*>(&wn), sizeof(wn));
@@ -56,20 +58,21 @@ void Stat::rdBin(std::ifstream &fin) {
 }
 
 void Stat::wrBin(std::ofstream &fout) const {
+    // write fixed-size binary record
     fout.write(nm, 16);
     fout.write(reinterpret_cast<const char*>(&pl), sizeof(pl));
     fout.write(reinterpret_cast<const char*>(&wn), sizeof(wn));
 }
 
 std::ostream &operator<<(std::ostream &out, const Stat &s) {
+    // formatted output for stats display
     out << std::left << std::setw(16) << s.getNm()
         << std::setw(8)  << s.getPl()
         << std::setw(8)  << s.getWn();
     return out;
 }
 
-// If you’re using these two operators, keep them.
-// They don’t change the game output unless you call them.
+// comparison operators (not required for gameplay)
 bool operator<(const Stat &a, const Stat &b) {
     return a.getWn() < b.getWn();
 }

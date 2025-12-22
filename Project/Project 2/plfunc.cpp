@@ -6,10 +6,12 @@
 
 using namespace std;
 
+// simple 1-6 roll (used for random choices)
 int dice() {
     return rand() % 6 + 1;   // 1-6
 }
 
+// create the 5 standard ships and reset their status
 void mkFlt(Ship *flt, int snum) {
     flt[0] = Ship("Car", 5);
     flt[1] = Ship("Bship", 4);
@@ -17,6 +19,7 @@ void mkFlt(Ship *flt, int snum) {
     flt[3] = Ship("Sub", 3);
     flt[4] = Ship("Dest", 2);
 
+    // clear ship state before placement
     for (int i = 0; i < snum; i++) {
         flt[i].hits = 0;
         flt[i].sunk = false;
@@ -26,6 +29,7 @@ void mkFlt(Ship *flt, int snum) {
     }
 }
 
+// convert "A10" into row/col indexes
 bool getPos(const string &in, int &row, int &col) {
     if (in.size() < 2) return false;
 
@@ -35,6 +39,7 @@ bool getPos(const string &in, int &row, int &col) {
     string cStr = in.substr(1);
     int cNum = 0;
 
+    // build column number from digits (supports 1-14)
     for (int i = 0; i < static_cast<int>(cStr.size()); i++) {
         if (!isdigit(static_cast<unsigned char>(cStr[i]))) return false;
         cNum = cNum * 10 + (cStr[i] - '0');
@@ -44,10 +49,10 @@ bool getPos(const string &in, int &row, int &col) {
 
     row = rCh - 'A';
     col = cNum - 1;
-
     return true;
 }
 
+// check if a ship fits on the board without overlap
 bool canPut(Plyr &p, Ship &s, int row, int col, char dir) {
     if (dir == 'H') {
         if (col + s.size > COLS) return false;
@@ -65,6 +70,7 @@ bool canPut(Plyr &p, Ship &s, int row, int col, char dir) {
     return true;
 }
 
+// write ship cells onto the fleet board
 void putShip(Plyr &p, Ship &s) {
     int row = s.row;
     int col = s.col;
@@ -80,6 +86,7 @@ void putShip(Plyr &p, Ship &s) {
     }
 }
 
+// manual placement: ask user for pos + direction for each ship
 void setFltMan(Plyr &p) {
     for (int i = 0; i < p.snum; i++) {
         Ship &s = p.flt[i];
@@ -111,6 +118,7 @@ void setFltMan(Plyr &p) {
                 continue;
             }
 
+            // store ship placement + draw on board
             s.row = row;
             s.col = col;
             s.dir = dir;
@@ -123,6 +131,7 @@ void setFltMan(Plyr &p) {
     prtBrd(p.fb, ROWS, COLS, ttl);
 }
 
+// find which ship index is at a hit location
 int hitShip(Plyr &def, int row, int col) {
     for (int i = 0; i < def.snum; i++) {
         Ship &s = def.flt[i];
@@ -143,9 +152,10 @@ int hitShip(Plyr &def, int row, int col) {
             }
         }
     }
-    return -1;
+    return -1;  // not found
 }
 
+// return true if every ship in the fleet is sunk
 bool allSunk(Plyr &p) {
     for (int i = 0; i < p.snum; i++) {
         if (!p.flt[i].sunk) return false;
@@ -153,6 +163,7 @@ bool allSunk(Plyr &p) {
     return true;
 }
 
+// simple "closest to random number" to decide who starts
 void pickFr(Plyr &p1, Plyr &p2, Plyr *&cur, Plyr *&oth) {
     const int MINN = 1;
     const int MAXN = 100;
